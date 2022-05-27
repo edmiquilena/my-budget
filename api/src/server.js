@@ -1,3 +1,4 @@
+import 'dotenv/config' 
 import express from "express";
 import bodyParser from "body-parser";
 import cors from 'cors'
@@ -21,17 +22,14 @@ app.get("/",  APIversion)
 // Authentication routes
 app.use('/auth', authRouter);
 
-
-
-app.use(RequireAuth)
-
 // Secure routes
-app.use('/movements', MovementsRouter);
+app.use(RequireAuth)
+app.use('/movement', MovementsRouter);
+
+const port = process.env.PORT || 5000;
 
 
 
-
-
-app.listen(5000, async () => {
-     console.log(`app is listening to port 5000`);
+app.listen(port, async () => {
+     console.log(`API served @ port ${port}`);
 })
