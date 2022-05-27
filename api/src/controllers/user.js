@@ -36,7 +36,7 @@ export const login = async (req, res, next) => {
             if(user) {
                 console.log(user.id)
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-                expiresIn: 60 * 60,
+                expiresIn: process.env.JWT_EXPIRE || 60 * 60,
               });
               res.status(200).send({
                 error: false,

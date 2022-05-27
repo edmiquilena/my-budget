@@ -5,8 +5,8 @@ import cors from 'cors'
 import passport from 'passport';
 import authRouter from "./routes/Auth";
 import RequireAuth from "./controllers/RequireAuth";
-import APIversion from "./controllers/version";
 import MovementsRouter from "./routes/Movements";
+import { APIVersion, Handle404 } from './controllers/misc';
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true}));
@@ -17,15 +17,14 @@ app.use(cors())
 require('./lib/passport');
 app.use(passport.initialize());
 
-app.get("/",  APIversion)
-
+app.get("/", APIVersion)
 // Authentication routes
 app.use('/auth', authRouter);
 
 // Secure routes
 app.use(RequireAuth)
 app.use('/movement', MovementsRouter);
-
+app.use(Handle404)
 const port = process.env.PORT || 5000;
 
 
