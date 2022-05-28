@@ -1,11 +1,8 @@
 import 'dotenv/config' 
-import bcrypt from 'bcrypt'
-import Sequelize from 'sequelize'
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JWTstrategy, ExtractJwt as ExtractJWT } from 'passport-jwt';
 import {User} from './db'
-const Op = Sequelize.Op;
 
 passport.use(
   'register',
@@ -48,7 +45,7 @@ passport.use(
       let user =   await User.findOne({
           where: {
             email: username,
-          },
+          }
         })
          if (user === null)     return done(null, false, { message: 'Invalid Email/Password.' });
        
@@ -58,7 +55,7 @@ passport.use(
          
           
       } catch (err) {
-          console.log("er",err)
+         
         done(err);
       }
     },

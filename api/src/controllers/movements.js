@@ -1,7 +1,8 @@
 import {Movement, db} from '../lib/db'
+import { Op } from 'sequelize'
 
 export const listMovements = async (req, res, next) => {
-    const limit = 2;
+    const limit = 10;
 let {by = 'desc', sort = 'timestamp', page = 1, filter = {}} = req.query;
 page = (page < 1) ? 1 : page;
 by = (['asc','desc'].includes(by)) ? by : 'desc'
@@ -11,12 +12,16 @@ filter = JSON.parse(filter)
 } catch(e) {
     filter = {}
 }
+console.log(filter?.tags)
+if(filter.tags) {
+    filter.tags =   { [Op.contains]: filter.tags }
+}
 let totalRecords = await Movement.count({where: {creator: req.user.id, ...filter}})
 let result = await Movement.findAll({
     offset:((page-1)*limit),
 limit : limit,
     
-    where: {creator: req.user.id, ...filter},
+    where: {creator: req.user.id,  ...filter},
     attributes: ['id', 'type', 'concept', 'timestamp', 'amount', 'tags', 'createdAt'],
     order: db.literal(`${sort} ${by}`)
 })
@@ -51,10 +56,15 @@ if(!destroy) return res.json({error:true, removed: false})
 return res.json({error:false, removed: true})
 }
 export const newMovement = async(req, res, next) => {
-    let {concept, amount, tags, type} = req.body;
+    try {
+    let {concept, amount, tags, type, date} = req.body;
 
 
-    let create =  Movement.build({concept, amount, tags, type, creator: req.user.id })
+    let create =  Movement.build({concept, amount, tags, type, creator: req.user.id, timestamp: date })
     await create.save();
     return res.json({error:false, created: true, data: create})
+    } catch(e) {
+        console.log(e)
+        res.status(403).json({error: true, message: "something went wrong."})
+    }
 }

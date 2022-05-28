@@ -18,7 +18,7 @@ const Movement = async(sequelize) => {  class Movement extends Model {}
       type: DataTypes.DATE,
       defaultValue:DataTypes.NOW
     },
-    amount: DataTypes.INTEGER,
+    amount: DataTypes.DECIMAL,
     creator: {
       type: DataTypes.UUID
     },

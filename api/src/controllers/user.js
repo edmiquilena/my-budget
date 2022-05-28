@@ -3,16 +3,10 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import {User} from '../lib/db'
 export const register = async (req, res, next) => {
-passport.authenticate('register', (err, user, info) => {
-if(err)   console.log('e1',err)
-if (info !== undefined) {
-    res.status(403).send({error: true, message: info.message});
-  } else {
-    req.logIn(user, error => {
-    if(error) res.status(403).send({ error: true, message: 'user cannot be created' });
-      res.status(200).send({error: false,  message: 'user created' });
-    });
-  }
+passport.authenticate('register', async(err, user, info) => {
+if(err)   return res.status(403).send({ error: true, message: 'user cannot be created' }); 
+ (info !== undefined) ?  res.status(403).send({error: true, message: info.message}) :   res.status(200).send({error: false,  message: 'user created' });
+
 
 
 })
@@ -21,29 +15,37 @@ if (info !== undefined) {
 }
 
 
+export const me = async (req, res, next) => {
+  passport.authenticate('jwt', { session: false }, (err, user, info) => {
+    if (err)  return res.status(500).json({error: true, message: "whoops, something went wrong!"});
+    if (info != undefined || !user) return res.status(403).json({error: true, message: info?.message, Auth: false});
+
+  req.user = user;
+    return res.json({error: false, user, Auth: true});
+    
+  })(req, res, next);
+}
+
 export const login = async (req, res, next) => {
 
-    passport.authenticate('login', (err, users, info) => {
-        
-        if (info !== undefined)  return res.status(403).send({error: true, message: info.message});
-        
-          req.logIn(users, async() => {
+    passport.authenticate('login', async(err, users, info) => {
+        if (info !== undefined)  return res.status(403).json({error: true, message: info.message});
          let user =  await User.findOne({
               where: {
                email: req.body.email
               },
+              attributes: ['id', 'email']
             })
             if(user) {
-                console.log(user.id)
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-                expiresIn: process.env.JWT_EXPIRE || 60 * 60,
+                expiresIn: "7d",
               });
-              res.status(200).send({
+              res.json({
                 error: false,
-                token
+                token,
+                user: user
               });
             }
-          });
         
       })(req, res, next);
   
