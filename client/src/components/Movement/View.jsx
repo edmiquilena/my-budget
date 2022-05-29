@@ -5,9 +5,7 @@ import {
     FormLabel,
     Input,
     Stack,
-    Link,
     Button,
-    Heading,
     Text,
     useToast,
     NumberInput,
@@ -16,8 +14,6 @@ import {
     NumberIncrementStepper,
     NumberDecrementStepper,
     Textarea,
-    Select,
-    SelectField,
     HStack,
     Tag,
     TagLabel,
@@ -27,27 +23,32 @@ import {
     Spinner,
   } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { AddIcon } from '@chakra-ui/icons';
 import API from '../../lib/API';
-import {BsFillTrashFill} from 'react-icons/bs'
 import { FetchMovement } from '../../lib/hooks/useQuery';
+import DeleteModal from './DeleteModal';
 function ViewMovement() {
-    const navigate = useNavigate();
+ 
   const {register, handleSubmit} = useForm();
 const [isSaving, SetisSaving] = useState(false)
-
+const toast = useToast({
+    position: 'bottom',
+    status: 'error',
+          duration: 1000,
+          isClosable: true,
+   
+  })
+  
 const {id} = useParams();
 const { data, isLoading, error, isFetching, refetch } =  FetchMovement(id);
-  const onSubmit = async({concept, type, date}) => {
+  const onSubmit = async({concept, date}) => {
     SetisSaving(true);
-  type = type == 1
 try {
- let create = await API.post("/movement", {
+ let create = await API.patch(`/movement/${id}`, {
     concept,
     amount,
     tags,
-    type,
     date
 },
 {
@@ -55,23 +56,13 @@ try {
       'Authorization': `JWT ${localStorage.AuthToken}`
     }
   })
-  navigate("/")
+  toast({ title: 'Movement has been updated!', status: 'success'});
+  refetch();
 } catch(e) {
 
 }
   SetisSaving(false);
   } 
-//   data:
-// amount: "10.10"
-// concept: "prueb22a"
-// createdAt: "2022-05-28T18:10:52.043Z"
-// creator: "c4c7a814-bf44-4279-8b9b-19798c69e1f2"
-// id: "bcf1d9b0-03f1-4533-b42d-3c8b0bcd5b47"
-// tags: (2) ['groceries', 'pets']
-// timestamp: "2022-05-28T00:00:00.000Z"
-// type: true
-
-
 
    const [type, setType] = useState(true)
   const format = (val) => ` $` + val
@@ -161,8 +152,8 @@ key={tag}
       <TagCloseButton onClick={() => removeTag(tag)}/>
     </Tag>)}</Box>
     </VStack>
-        </FormControl>
-        <HStack spacing={4}>
+        </FormControl><VStack spacing={4}  align='stretch'>
+      
          
           <Button
         isLoading={isSaving}
@@ -170,11 +161,13 @@ key={tag}
         >
             Save
           </Button>
-          <IconButton  icon={<BsFillTrashFill />} size={'sm'} />
-        </HStack>
+          <DeleteModal id={id} />
+        </VStack>
       </Stack>
     </Box>
   </Stack>} </>);
 }
+
+
 
 export default ViewMovement;

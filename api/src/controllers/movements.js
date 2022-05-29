@@ -41,8 +41,8 @@ res.json({error: false, data: movement})
 
 export const updateMovement = async(req, res, next) => {
 
-let {concept, amount, tags} = req.body;
-let update = await Movement.update({concept, amount, tags}, {where: {id: req.params.id, creator: req.user.id}});
+let {concept, amount, tags, date} = req.body;
+let update = await Movement.update({concept, amount, tags, timestamp: date}, {where: {id: req.params.id, creator: req.user.id}});
 if(!update) return res.json({error: true, message: "something went wrong."})
 const movement = await Movement.findByPk(req.params.id, 
     {attributes: ['id', 'type', 'concept', 'timestamp', 'amount', 'tags', 'createdAt', 'creator']})

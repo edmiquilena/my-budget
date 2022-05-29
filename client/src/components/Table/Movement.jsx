@@ -1,17 +1,11 @@
 
 import { AddIcon, CalendarIcon, MinusIcon } from '@chakra-ui/icons';
 import {
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
     Tr,
-    Th,
     Td,
-    TableCaption,
-    TableContainer, Text, Box, Tag, TagLabel, TagLeftIcon, Icon
+    Text, Box, Tag, TagLabel, TagLeftIcon, Icon
   } from '@chakra-ui/react'
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useFilters } from '../../lib/hooks/useFilters';
 export const MovementItem = ({item}) => {
   const navigate =  useNavigate();

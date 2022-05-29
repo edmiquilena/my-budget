@@ -1,32 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import {
   Box,
   Flex,
-  Avatar,
   HStack,
   Link,
-  IconButton,
   Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-  useDisclosure,
-  useColorModeValue,
-  Stack,
   Heading,
   Text,
   Icon,
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 import {AiFillHome} from 'react-icons/ai'
-import {Link as RouteLink, Navigate, Route, useNavigate} from 'react-router-dom'
+import {Link as RouteLink, useNavigate} from 'react-router-dom'
+import { useAuth } from '../../lib/hooks/useAuth';
 function Layout({title, children}) { 
-     const { isOpen, onOpen, onClose } = useDisclosure();
      const navigate = useNavigate();
-     
+     const {logOut} = useAuth();
     return ( <>
         <Helmet>
         <meta charset="UTF-8"></meta> 
@@ -72,18 +62,9 @@ function Layout({title, children}) {
               as={RouteLink} to="/add">
               New
             </Button>
-          <Box display={{ base: 'none', md: 'flex' }}>  <NavLink >Logout</NavLink></Box>
+          <Box display={{ base: 'none', md: 'flex' }}>  <NavLink onClick={() => logOut()}>Logout</NavLink></Box>
           </Flex>
         </Flex>
-
-        {isOpen ? (
-          <Box pb={4} display={{ md: 'none' }}>
-            <Stack as={'nav'} spacing={4}>
-            <NavLink  as={RouteLink} to="/dashboard" >Dashboard</NavLink>
-            <NavLink to="logout">Logout</NavLink>
-            </Stack>
-          </Box>
-        ) : null}
       </Box>
 
       <Box p={4}>{children}</Box>

@@ -1,4 +1,4 @@
-import { Box, Container, Heading, Spinner, Table, TableContainer, Tbody, Text,Flex, Spacer, Tag, TagCloseButton, TagLabel } from "@chakra-ui/react";
+import { Box, Container, Heading, Spinner, Table, TableContainer, Tbody, Text,Flex, Spacer, Tag, TagCloseButton, TagLabel, Alert, AlertIcon } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useFilters } from "../../lib/hooks/useFilters";
 import { FetchMovements } from "../../lib/hooks/useQuery";
@@ -34,7 +34,10 @@ useEffect(() => {
  </Box>
   </Flex>  </Container>
     </Heading>
-    {!isLoading && <Container maxW={'100ch'}><TableContainer><Table variant='simple'><Tbody>{data.result.map(movement => <MovementItem item={movement} />)}</Tbody></Table></TableContainer></Container> }
+    {!isLoading && <Container maxW={'100ch'}>{data.result.length > 0 ? <TableContainer><Table variant='simple'><Tbody>{data.result.map(movement => <MovementItem item={movement} />)}</Tbody></Table></TableContainer> : <Alert status='info' bg={'brand.mediumGrey'} variant='left-accent' borderColor={'brand.primary'}>
+    <AlertIcon color={'brand.primary'} />
+    Shoots, There's nothing to show!
+  </Alert>}</Container> }
    </>
     );
 }

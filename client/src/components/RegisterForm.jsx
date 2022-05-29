@@ -11,9 +11,9 @@ import {
     Text,
     useToast,
   } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from "react-router-dom";
-import { useAuth } from '../lib/hooks/useAuth';;
+import { useForm } from 'react-hook-form'
+import { useNavigate, Link as RouteLink } from "react-router-dom"
+import { useAuth } from '../lib/hooks/useAuth'
 function RegisterForm() {
     const navigate = useNavigate();
   const {register, handleSubmit} = useForm();
@@ -72,7 +72,7 @@ function RegisterForm() {
             Register
           </Button>
          <Box align={'center'}><Text fontSize={'MD'} color={'brand.primary'} fontFamily={'Manrope'}>
-        <Text color={'brand.light'}>Got an account?</Text> <Link>L O G I N</Link>
+        <Text color={'brand.light'}>Got an account?</Text> <Link as={RouteLink} to={'/login'}>L O G I N</Link>
       </Text></Box> 
         </Stack>
       </Stack>

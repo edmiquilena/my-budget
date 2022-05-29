@@ -12,7 +12,6 @@ import { ProvideAuth } from './lib/hooks/useAuth';
 import { RequireAuth } from './lib/helpers/RequireAuth';
 import Add from './routes/Add';
 import { QueryClient, QueryClientProvider} from 'react-query'
-import ViewMovement from './components/Movement/View';
 import View from './routes/View';
 
 WebFont.load({

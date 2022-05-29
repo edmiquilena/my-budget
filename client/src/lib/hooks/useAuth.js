@@ -38,7 +38,7 @@ const [isLoading, setIsLoading] = useState(true);
     }  
   };
   const logOut = () => {
- 
+ localStorage.removeItem("AuthToken");
         setUser(false);
      
   };

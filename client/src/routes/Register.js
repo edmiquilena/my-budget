@@ -3,10 +3,6 @@ import Helmet from 'react-helmet';
 import RegisterForm from '../components/RegisterForm';
 
 class Register extends Component {
-    constructor(props) {
-        super(props);
-    }
-    state = {  }
     render() { 
         return ( 
            <> <Helmet>

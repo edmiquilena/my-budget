@@ -1,5 +1,5 @@
 
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 
 const FiltersContext = createContext({});

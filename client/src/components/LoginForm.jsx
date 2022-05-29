@@ -12,7 +12,7 @@ import {
     useToast,
   } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouteLink  } from "react-router-dom";
 import { useAuth } from '../lib/hooks/useAuth';
 function LoginForm() {
     const navigate = useNavigate();
@@ -73,7 +73,7 @@ function LoginForm() {
             Login
           </Button>
          <Box align={'center'}><Text fontSize={'MD'} color={'brand.primary'} fontFamily={'Manrope'}>
-        <Text color={'brand.light'}>New here?</Text> <Link>R E G I S T E R</Link>
+        <Text color={'brand.light'}>New here?</Text> <Link as={RouteLink} to={'/register'}>R E G I S T E R</Link>
       </Text></Box> 
         </Stack>
       </Stack>
