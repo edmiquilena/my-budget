@@ -11,10 +11,11 @@ export const useAuth = () => useContext(authContext);
  function useProvideAuth() {
   const [user, setUser] = useState(null);
 const [errors, setErrors] = useState(false)
-const [isLoading, setIsLoading] = useState(true);
+const [isLoading, setIsLoading] = useState(false);
 
 
   const Login = async(email, password) => {
+    setIsLoading(true); 
   try {
    const res =  await API.post('auth/login', {email, password})
    setUser({user: res.data.user, token: res.data.token});
@@ -28,6 +29,7 @@ const [isLoading, setIsLoading] = useState(true);
   }  
   };
   const Register = async(email, password) => {
+    setIsLoading(true); 
     try {
      const res =  await API.post('auth/register', {email, password})
     return Login(email, password)
@@ -45,12 +47,14 @@ const [isLoading, setIsLoading] = useState(true);
   
 
   useEffect(() => {
-    return () =>  fetchMe();
+    console.log("memememem")
+    fetchMe();
   }, []);
 
 const fetchMe = () => {
+  setIsLoading(true); 
     if(localStorage.getItem("AuthToken")) {
-        setIsLoading(true); 
+      
     API.get('auth/me', {
         headers: {
           'Authorization': `JWT ${localStorage.AuthToken}`
