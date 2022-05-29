@@ -21,6 +21,8 @@
     "sequelize": "^6.20.0"
   },
   "scripts": {
-    "start": "nodemon --exec babel-node src/server.js"
+    "dev": "nodemon --exec babel-node src/server.js",
+    "build-server": "babel -d ./build ./src -s",
+    "start": "node ./build/server.js "
   }
 }

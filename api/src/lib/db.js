@@ -7,7 +7,7 @@ const db = new Sequelize(process.env.DATABASE, process.env.DB_USER, process.env.
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'postgres',
-    logging: true
+    logging: false
   });
  Movement(db)
 User(db)
