@@ -1,7 +1,7 @@
-import { Box, Container, Heading, Spinner, Table, TableContainer, Tbody, Text,Flex, Spacer, Tag, TagCloseButton, TagLabel, Alert, AlertIcon } from "@chakra-ui/react";
+import { Box, Container, Heading, Spinner, Table, TableContainer, Tbody, Text,Flex, Spacer, Tag, TagCloseButton, TagLabel, Alert, AlertIcon, Badge } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useFilters } from "../../lib/hooks/useFilters";
-import { FetchMovements } from "../../lib/hooks/useQuery";
+import { FetchBalance, FetchMovements } from "../../lib/hooks/useQuery";
 import { MovementItem } from "../Table/Movement";
 function Home() {
 
@@ -9,6 +9,7 @@ function Home() {
 
     const { data, isLoading, error, isFetching, refetch } =  FetchMovements({page: 1, filter:filters});
 
+    const balance =  FetchBalance();
 useEffect(() => {
     refetch();
 }, [])
@@ -19,6 +20,9 @@ useEffect(() => {
     <Container> <Flex spacing={30}>
    <Box>My<Text display={'inline'} color={'brand.primary'}> Overview</Text> 
     {(isLoading || isFetching) && <Spinner />}
+    {(!balance.isLoading || !balance.isFetching) &&  <Badge ml='1' fontSize='0.8em' colorScheme={(balance.data.total < 0) ? 'red' : 'green'}>
+    $ {balance.data.total.toFixed(2)}
+  </Badge>} 
  </Box> <Spacer />
  <Box>
  {(filters?.tags) ? <><Heading fontFamily={'Manrope'}>Filtering by Tag</Heading> <Tag

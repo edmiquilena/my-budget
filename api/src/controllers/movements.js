@@ -1,5 +1,27 @@
 import {Movement, db} from '../lib/db'
-import { Op } from 'sequelize'
+import { Op, fn , Sequelize} from 'sequelize'
+
+export const myBalance = async (req, res, next) => {
+try {
+let In = await Movement.findAll({  
+    where: {creator: req.user.id, type: true},
+    attributes: [ [Sequelize.fn('sum', Sequelize.col('amount')), 'total']],
+    group : ['Movement.type']
+})
+let Out = await Movement.findAll({  
+    where: {creator: req.user.id, type: false},
+    attributes: [[Sequelize.fn('sum', Sequelize.col('amount')), 'total']],
+    group : ['Movement.type']
+})
+In = In.length > 0 ? In[0].dataValues.total : 0;
+Out = Out.length > 0 ? Out[0].dataValues.total : 0;
+console.log(In  ,Out)
+return res.json({In, Out, total: In-Out})
+} catch(e){
+
+    return res.json({In: 0, Out: 0}) }
+  
+}
 
 export const listMovements = async (req, res, next) => {
     const limit = 10;

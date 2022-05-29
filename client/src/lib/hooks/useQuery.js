@@ -11,7 +11,16 @@ async function getMovements({by = 'desc', sort = 'timestamp', page = 1, filter =
       return e.message;
     }
   }
-
+  async function getBalance() {
+    try {
+      const { data, headers } = await  API.get(`/movement/balance`, {   headers: {
+        'Authorization': `JWT ${localStorage.AuthToken}`
+      }});
+      return data;
+    } catch(e) {
+      return e.message;
+    }
+  }
   async function getMovement(id) {
     try {
       const { data, headers } = await  API.get(`/movement/${id}`, {   headers: {
@@ -31,7 +40,13 @@ async function getMovements({by = 'desc', sort = 'timestamp', page = 1, filter =
       });
     }
 
+    export function FetchBalance() {
 
+   
+      return useQuery(['balance'], () => getBalance(), {
+        staleTime: 1000 * 60 * 1
+      });
+    }
 export function FetchMovements({by = 'desc', sort = 'timestamp', page = 1, filter = {}, options}) {
 
     let  params = {by , sort, page, filter };
